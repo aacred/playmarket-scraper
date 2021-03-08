@@ -6,7 +6,7 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /api
 COPY ["GrpcApplication/GrpcApplication.csproj", "GrpcApplication/"]
 COPY ["Repository/Repository.csproj", "Repository/"]
-RUN dotnet restore "docker /GrpcApplication.csproj"
+RUN dotnet restore "GrpcApplication/GrpcApplication.csproj"
 
 # Copy everything else and build
 COPY . .
