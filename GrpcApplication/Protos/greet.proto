@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option csharp_namespace = "GrpcApplication";
+
+service TaskSender {
+  rpc GetDetails (DetailsRequest) returns (DetailsReply);
+}
+
+message DetailsRequest {
+  sfixed64 id = 1;
+}
+
+message DetailsReply {
+  string result = 1;
+  bool found = 2;
+}

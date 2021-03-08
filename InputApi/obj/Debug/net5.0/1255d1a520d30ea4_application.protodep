@@ -1,0 +1,2 @@
+obj/Debug/net5.0/Protos/Application.cs \
+obj/Debug/net5.0/Protos/ApplicationGrpc.cs: Protos/application.proto

@@ -1,0 +1,51 @@
+version: '3.4'
+
+services:
+  scrapper:
+    image: grpc-service
+    build:
+      context: .
+      dockerfile: GrpcApplication.Dockerfile
+    ports:
+      - 5002:5002
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DB_CONNECTION_STRING=Host=db;Port=5432;Database=applications;Username=andrei;Password=fontanka
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+      - ~/.aspnet/https:/https:ro
+  
+  api:
+    image: api-service
+    build:
+      context: .
+      dockerfile: InputApi.Dockerfile
+    ports:
+      - 5000:80
+    depends_on:
+      - db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - DB_CONNECTION_STRING=Host=db;Port=5432;Database=applications;Username=andrei;Password=fontanka
+      - GRPC_CONNECTION_STRING=http://scrapper:5002
+    volumes:
+      - ~/.vsdbg:/remote_debugger:rw
+      - ~/.aspnet/https:/https:ro
+
+  db: # this is used as the host in your connection string 
+    image: postgres
+    container_name: 'postgres_container'
+    environment:
+      - POSTGRES_USER=andrei
+      - POSTGRES_PASSWORD=fontanka
+      - POSTGRES_DB=applications
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+volumes:
+  pgdata:
